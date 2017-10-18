@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<title>Insert title here</title>
+</head>
+<body>
+	<script src="al.js"></script>
+	<h1 style="color:blue">Welcome instructor</h1>
+	<div id="qm">
+	<table id="tid">
+		<tr>
+			<td>
+				<h3 style="color:blue;font-size:25px;background-color:">Question Management</h3> Statement:<br /> <input id='stmt'  placeholder="Statement"/><br />
+				Choice1: <br />
+				<input id='c1' placeholder="enter first choice"value=''style="text-size:20px" /><br /> Choice2: <br />
+				<input id='c2' placeholder="enter second choice"/><br /> Choice3: <br />
+				<input id='c3' placeholder="enter thirdchoice"/><br /> Choice4: <br />
+				<input id='c4' placeholder="enter fourth choice"/><br /> Answer: <br />
+				<input id='ans'  placeholder="Answer"><br />
+				<div id="add"> 
+				<input type='button'
+				onClick='addQuestion()' class="btn btn-success" value='Add'style="color:black" /></div><div id="remove"> <input
+				type='button' onClick='removeQuestion()'class="btn btn-success" style="color:black"value='Remove' />
+				</div>
+			</td>
+			<td>
+				<div id="output"></div>
+			</td>
+		</tr>
+	</table>
+	</div>
+	<div id="logout">
+	<input type="button" class="btn btn-success" value="Logout"
+			onClick="logout()" />
+	</div>
+	<script>
+	$(document).ready(function(){
+	    $("input").focus(function(){
+	        $(this).css("background-color", "#cccccc");
+	    });
+	    $("input").blur(function(){
+	        $(this).css("background-color", "#ffffff");
+	    });
+	});
+	
+		function addQuestion() {
+			Q.push({
+				statement : getValue('stmt'),
+				choices : [ getValue('c1'), getValue('c2'), getValue('c3'),
+						getValue('c4') ],
+				answer : getValue('ans')
+			})
+			store(function() {
+				retrieveAndDisplay()
+			})
+		}
+
+		function removeQuestion() {
+			Q.pop()
+			store(function() {
+				retrieveAndDisplay()
+			})
+		}
+
+		function retrieveAndDisplay() {
+			retrieve(function() {
+				var s = ''
+				s += '</ol><h3 class="qs" style="color:blue;font-size:25px">Questions</h3><ol>'
+				for (var i = 0; i < Q.length; ++i)
+					s += '<li>' + Q[i].statement + '</li>'
+				s += '</ol>'
+				getElement('output').innerHTML = s
+			})
+		}
+
+		retrieveAndDisplay()
+	</script>
+	<style>
+	#qm{
+		border:2px #1e90ff;
+		width:700px;
+		height:400px;
+		margin-left:350px;
+		margin-top:95px;
+		border-radius:3px;
+		paddingleft:10px;
+		background-color:cyan;
+		
+	}
+	#tid{
+	margin-left:20px;
+	}
+	#add{
+	margin-top:5px;
+	}
+	#remove{
+	margin-top:-35px;
+	margin-left:96px;
+	}
+	.qs{
+	margin-left:15px;
+	margin-top:-90px;
+	}
+	#output{
+	margin-left:150px;
+	}
+	body{
+	background-color:#e6e6fa;
+	}
+	#logout{
+	margin-left:1100px;
+	margin-top:-400px;
+	}
+	</style>
+</body>
+</html>

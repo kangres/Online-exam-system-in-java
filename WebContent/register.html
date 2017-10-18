@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Register</title>
+</head>
+<body>
+	<script src="al.js"></script>
+	<script
+		src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+		
+	<div id ="reg-form">
+	<table id="tb">
+		<tr>
+			<td>
+				<h3>User Management</h3> ID: <br />
+			<input id='id' /><br /> Password:<br /> <input id='pass' value='123' /><br />
+				Name:<br /> <input id='name' /><br /> Type:<br />
+			<input id='type' / value='student'><br /> <input
+				type='button' id="push" onClick='addUser()' value='Push User' /> <input
+				type='button' id="pop" onClick='removeUser()' value='Pop User' />
+			<td>
+				<div id="output"></div>
+			</td>
+		</tr>
+	</table>
+	<p class="login"><a href="login.html" style="color:solid black">Login</a></p>
+	</div>
+	<script>
+		function addUser() {
+			U.push({
+				id : getValue('id'),
+				password : getValue('pass'),
+				name : getValue('name'),
+				type : getValue('type'),
+			})
+			store(function() {
+				retrieveAndDisplay()
+			})
+		}
+
+		function removeUser() {
+			U.pop()
+			store(function() {
+				retrieveAndDisplay()
+			})
+		}
+		function retrieveAndDisplay() {
+			retrieve(function() {
+				var s = ''
+				s += '<h3></h3><ol>'
+				for (var i = 0; i < U.length; ++i)
+					s += '<li>' + U[i].name + '</li>'
+				getElement('output').innerHTML = s
+			})
+		}
+
+		retrieveAndDisplay()
+		
+		$(document).ready(function(){
+    $("input").focus(function(){
+        $(this).css("background-color", "#cccccc");
+    });
+    $("input").blur(function(){
+        $(this).css("background-color", "#ffffff");
+    });
+});
+	</script>
+	<style>
+		#reg-form{
+		border:3px solid black;
+		margin-left:450px;
+		margin-top:160px;
+		height:400px;
+		background-color:yellow;
+		width:400px;
+		border-radius:5px;
+		}
+		#tb{
+		margin-left:50px;
+		color:blue;
+		margin-top:60px;
+		}
+	h3{
+	margin-top:0px;
+	font-size:20px;
+	color:green;
+	}
+	.login{
+	font-size:20px;
+	text-decoratiion:underline;
+	margin-left:150px;
+	}
+	body{
+	background-color:orange;
+	}
+	#pop{
+	margin-left:20px;
+	margin-top:10px;
+	}
+	#push{
+	margin-top:10px;
+	}
+	</style>
+</body>
+</html>

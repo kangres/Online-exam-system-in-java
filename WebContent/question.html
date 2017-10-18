@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html>
+<link rel="stylesheet"
+	href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+<script
+	src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script
+	src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+
+<body>
+	<script src="al.js"></script>
+	<div id="exit">
+			<input type="button" class="btn btn-primary btn-lg" value="LogOut"
+			onClick="logout()" /> 
+	</div>
+	<div id="qform">
+		<table>
+			<tr>
+				<td>
+					<h3>Make Questions</h3>
+					<div id="statement">
+						Statement:<br /> <input id='stmt' /><br />
+					</div>
+					<div id="choiceone">
+						<br />
+						1.<input id='c1' placeholder="enter first choice" value=''><br />
+						<br />
+						2.<input id='c2' placeholder="enter second choice" /><br />
+					</div>
+					<div id="choicetwo">
+						<br />
+						3.<input id='c3' placeholder="enter third choice" /><br /> <br />
+						4.<input id='c4' placeholder="enter fourth choice" /><br />
+					</div>
+					<div id="ans">
+						 <br />
+						Answer:<input id='ans' value='1'><br />
+					</div>
+					<div id="add">
+						<input type="button" class="btn btn-primary btn-lg" value="Add"
+							onClick="addQuestion()" /> 
+					</div>
+					<div id="remove">
+							<input type='button'
+							class="btn btn-primary btn-lg" onClick='removeQuestion()'
+							value='Remove' />
+					</div>
+				</td>
+				<td>
+					<div id="output"></div>
+				</td>
+			</tr>
+		</table>
+	</div>
+	<script>
+		function addQuestion() {
+			Q.push({
+				statement : getValue('stmt'),
+				choices : [ getValue('c1'), getValue('c2'), getValue('c3'),
+						getValue('c4') ],
+				answer : getValue('ans')
+			})
+			store(function() {
+				retrieveAndDisplay()
+			})
+		}
+
+		function removeQuestion() {
+			Q.pop()
+			store(function() {
+				retrieveAndDisplay()
+			})
+		}
+
+		function retrieveAndDisplay() {
+			retrieve(function() {
+				var s = ''
+				s += '</ol><h3>Questions</h3><ol>'
+				for (var i = 0; i < Q.length; ++i)
+					s += '<li>' + Q[i].statement + '</li>'
+				s += '</ol>'
+			})
+		}
+		$(document).ready(function(){
+		    $("input").focus(function(){
+		        $(this).css("background-color", "#cccccc");
+		    });
+		    $("input").blur(function(){
+		        $(this).css("background-color", "#ffffff");
+		    });
+		});
+
+		retrieveAndDisplay()
+	</script>
+	<style>
+h3 {
+	color: blue;
+	font-size: 40px;
+}
+
+#statement {
+	color: blue;
+	font-size: 20px;
+	margin-left: 35px;
+}
+
+#qform {
+	border: solid blue 2px;
+	width: 700px;
+	margin-left: 320px;
+	height: 450px;
+	margin-top: 85px;
+	background-color:#ffd700;
+	border-radius: 4px ;
+}
+body{
+background:#87cefa;
+}
+
+#exit{
+margin-left:1150px;
+margin-top:20px;
+}
+#choiceone {
+	display: inline-block;
+	margin-left: 20px;
+	margin-top: 10px;
+	color: blue;
+	font-size:20px;
+}
+
+#choicetwo {
+	margin-top: 20px;
+	display: inline-block;
+	margin-left: 50px;
+	color: blue;
+	font-size:20px;
+}
+
+#ans {
+	margin-left: 100px;
+	margin-top: 10px;
+	color: blue;
+	text-box-width: 30px;
+}
+#add{
+margin-left:180px;
+margin-top:30px;
+}
+#remove{
+margin-top:-48px;
+margin-left:430px;
+}
+</style>
+</body>
+</html>

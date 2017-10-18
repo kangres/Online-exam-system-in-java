@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+	<script src="al.js"></script>
+	<table>
+		<tr>
+			<td>
+				<h3>User Management</h3> ID: <br />
+			<input id='id' /><br /> Password:<br /> <input id='pass' value='123' /><br />
+				Name:<br /> <input id='name' /><br /> Type:<br />
+			<input id='type' value='student'><br /> <input
+				type='button' onClick='addUser()' value='Push User' /> <input
+				type='button' onClick='removeUser()' value='Pop User' />
+				<h3>Question Management</h3> Statement:<br /> <input id='stmt' /><br />
+				Choice1: <br />
+			<input id='c1' value='' /><br /> Choice2: <br />
+			<input id='c2' /><br /> Choice3: <br />
+			<input id='c3' /><br /> Choice4: <br />
+			<input id='c4' /><br /> Answer: <br />
+			<input id='ans'  value='1'><br /> <input type='button'
+				onClick='addQuestion()' value='Push Question' /> <input
+				type='button' onClick='removeQuestion()' value='Pop Question' />
+			</td>
+			<td>
+				<div id="output"></div>
+			</td>
+		</tr>
+	</table>
+	<script>
+		function addUser() {
+			U.push({
+				id : getValue('id'),
+				password : getValue('pass'),
+				name : getValue('name'),
+				type : getValue('type'),
+			})
+			store(function() {
+				retrieveAndDisplay()
+			})
+		}
+
+		function removeUser() {
+			U.pop()
+			store(function() {
+				retrieveAndDisplay()
+			})
+		}
+
+		function addQuestion() {
+			Q.push({
+				statement : getValue('stmt'),
+				choices : [ getValue('c1'), getValue('c2'), getValue('c3'),
+						getValue('c4') ],
+				answer : getValue('ans')
+			})
+			store(function() {
+				retrieveAndDisplay()
+			})
+		}
+
+		function removeQuestion() {
+			Q.pop()
+			store(function() {
+				retrieveAndDisplay()
+			})
+		}
+
+		function retrieveAndDisplay() {
+			retrieve(function() {
+				var s = ''
+				s += '<h3>Users</h3><ol>'
+				for (var i = 0; i < U.length; ++i)
+					s += '<li>' + U[i].name + '</li>'
+				s += '</ol><h3>Questions</h3><ol>'
+				for (var i = 0; i < Q.length; ++i)
+					s += '<li>' + Q[i].statement + '</li>'
+				s += '</ol>'
+				getElement('output').innerHTML = s
+			})
+		}
+
+		retrieveAndDisplay()
+	</script>
+</body>
+</html>

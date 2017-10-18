@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html>
+<link rel="stylesheet"
+	href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+<script
+	src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script
+	src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+	<script src="al.js"></script>
+	<div id="b">
+		<input type="button" class="btn btn-primary btn-lg" value="Logout"
+			onClick="logout()" />
+	</div>
+
+	<div id="output">Loading...</div>
+	<div id="E">
+		<input type="button" class="btn btn-primary btn-lg" value="EXAM1"
+			onClick="retrieveAndDisplay()" />
+	</div>
+	<div id="form">
+		<table>
+			<tr>
+				<td><div id="questions" onClick="showform()"></div></td>
+				<td><div id="choice"></div></td>
+			</tr>
+		</table>
+			</div>
+			<div id="result">
+			<input type="button" class="btn btn-primary btn-lg" style=""
+				value="ShowResult" onClick="showResult()" />
+		</div>
+			
+	<script>
+var marks=0
+var j=0
+OnLoad(()=>{
+	if(User)
+		getElement("output").innerHTML = "<h1>Welcome User</h1>"
+	else
+		getElement("output").innerHTML = "Who are you?"
+})
+function showform(){
+	$('#form').show()
+}
+function retrieveAndDisplay() {
+	showform()
+	retrieve( function() {
+		  var count=0
+	      var s = '<h3>Questions</h3><ol>'
+	      for( var i = 0; i < Q.length; ++i)
+	    	s+='<li>'+'<div onClick="ShowOption('+ i +')">'+Q[i].statement+'</div> </li>'
+	    	count++
+	      	s+= '</ol>'
+	      getElement('questions').innerHTML = s
+	  })
+}
+function ShowOption(x) {
+	  retrieve( function() {
+		    var c=1
+		    var s = ''
+		    s+= '<h3 class="option">Choices</h3>'
+			var n = String(Q[x].choices).split(',')
+		    for( var i = 0; i < 4; ++i){
+		  		s+='<input type="radio" id="'+ c++ +'" onClick="check('+x+','+i+')" name="ch"/> ' +n[i]+ '<br/>'
+		    }
+		  		getElement('choice').innerHTML = s
+		  })
+}
+function check(x,i){
+	var ans = String(Q[x].answer)
+	if (document.getElementById(ans).checked == true){
+					++marks
+	}
+	else if (marks > 0)
+			--marks
+	else{
+		marks = 0
+	}
+
+} 
+function showResult(){
+	getElement('result').innerHTML='SCORE:'+marks
+}
+</script>
+	<style>
+#b {
+	margin-left: 1200px;
+	button-width: 200px;
+	margin-top: 20px;
+}
+
+h1 {
+	color: blue;
+	margin-top: -50px;
+}
+
+body {
+	background-color: orange;
+}
+
+h3 {
+	margin-left: 30px;
+	margin-top: 10px;
+}
+
+.option {
+	margin-left: 0px;
+	margin-top: -210px;
+}
+
+#choice {
+	margin-left: 250px;
+	margin-top: 100px;
+}
+
+#form {
+	border: solid red 2px;
+	display: transparent;
+	width: 700px;
+	height: 400px;
+	margin-left: 330px;
+	background-color: cyan;
+	border-radius: 6px;
+}
+
+#result {
+	margin-left: 0px;
+	margin-top: 0px;
+	color: blue;
+}
+</style>
+</body>
+</html>

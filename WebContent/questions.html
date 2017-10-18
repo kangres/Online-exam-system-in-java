@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Questions</title>
+<script src="al.js"></script>
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+<link rel="stylesheet"
+	href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+<script
+	src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+</head>
+<body>
+	<div class="row">
+		<div class="col-lg-6" id="output">Loading...</div>
+		<div class="col-lg-6">
+			<input type="button" class="btn btn-danger" value="Log Out"
+				onClick="takeMeOut()" />
+		</div>
+	</div>
+	<div id="css">
+	<div class="row">
+		<div class="col-lg-6">
+			<div class="row col-lg-12">
+				<span><strong>Questions</strong></span>
+			</div>
+			<div id="questions" class="row col-lg-12"></div>
+		</div>
+		<div class="col-lg-6">
+			<div class="row col-lg-12">
+				<span><strong>Choices</strong></span>
+			</div>
+			<div id="choices">
+				<div class='row col-lg-12'>
+					<input type='radio' name="ch_radio" id="c1_radio" value="1" /> <span
+						id='c1'>Sample option</span>
+				</div>
+				<div class='row col-lg-12'>
+					<input type='radio' name="ch_radio" id="c2_radio" value="2" /> <span
+						id='c2'>Sample option</span>
+				</div>
+				<div class='row col-lg-12'>
+					<input type='radio' name="ch_radio" id="c3_radio" value="3" /> <span
+						id='c3'>Sample option</span>
+				</div>
+				<div class='row col-lg-12'>
+					<input type='radio' name="ch_radio" id="c4_radio" value="4" /> <span
+						id='c4'>Sample option</span>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-sm-1">
+			<input type="button" class="btn btn-primary" value="add"
+				onClick="addQuestion()" />
+		</div>
+		<div class="col-sm-1">
+			<input type="button" class="btn btn-danger" value="remove"
+				onClick="removeQuestion()" />
+		</div>
+	</div>
+	</div>
+
+
+
+	<script>
+		
+		var qCount = 0 
+		if(Q)
+			questionCount = Q.length
+		var selectedOption = 1
+		var selectedQuestion = null
+		OnLoad( () => {
+			if(User)
+				getElement("output").innerHTML = "Welcome "+ User.name
+			else
+				getElement("output").innerHTML = "Who are you?"
+		});
+		
+		hideChoices()
+		retrieveQuestions()
+		
+		$("#questions").click(editQuestion)
+		$("#questions").focusout(questionEdited)
+		
+		$("#choices").click(setOption)
+		$("#choices").focusout(saveOption)
+		
+		function resetChoices() {
+			for(var i = 1;i<=4;i++)
+				$("#c"+i).text("Sample option")
+		}
+		
+		// Updates the list with the stored questions
+		function retrieveQuestions() {
+			var questionsDiv = $("#questions")
+			for(var i = 0;i<qCount;i++) {
+				var questionElement = $("<div>")
+				var spanElement = $("<span>")
+				spanElement.text(Q[i].statement)
+				questionElement.append(spanElement)
+				questionElement.attr("id",i+1)
+				questionsDiv.append(questionElement)
+			}
+			retrieveOptions()
+			Q.pop()
+		}
+		function retrieveOptions() {
+			if(qCount != 0) {
+				for(var i = 0;i<4;i++) {
+					$("#c"+(i+1)).text(Q[qCount-1].choices[i])
+				}
+				var answer = Q[qCount-1].answer
+				$("#c"+answer+"_radio").attr("checked","checked")
+			} else
+				hideChoices()
+		}
+		
+		function editQuestion(event) {
+			var element = $(event.target)
+			var qID = element.parent().attr("id")
+			if(event.target.nodeName == "SPAN" && qID == qCount) {
+				var questionText = element.text()
+				var parentElement = element.parent()
+				var inputElement = $("<input />")
+				inputElement.val(questionText)
+				parentElement.html(inputElement)
+				inputElement.focus()
+			}
+		}
+		
+		function questionEdited(event) {
+			var element = $(event.target)
+			var qID = element.parent().attr("id")
+			if(event.target.nodeName == "INPUT" && qID == qCount) {
+				var questionText = element.val()
+				selectedQuestion = questionText
+				var parentElement = element.parent()
+				var spanElement = $("<span>")
+				spanElement.text(questionText)
+				parentElement.html(spanElement)
+			}
+		}
+		
+		function setOption(event) {
+			if(event.target.nodeName == "SPAN") {
+				var element = $(event.target)
+				var optionText = element.text()
+				var radioItem = element.siblings()
+				var optionId = element.attr("id")
+				var parentElement = element.parent()
+				var inputElement = $("<input />")
+				inputElement.attr("id",optionId)
+				inputElement.val(optionText)
+				parentElement.children().remove()
+				parentElement.append(radioItem)
+				parentElement.append(inputElement)
+				inputElement.focus()
+			}
+		}
+		
+		function saveOption(event) {
+			var element = $(event.target)
+			if(event.target.nodeName == "INPUT" && element.attr("type")!="radio") {
+				var radioItem = element.siblings()
+				var optionText = element.val()
+				var optionId = element.attr("id")
+				var parentElement = element.parent()
+				var spanElement = $("<span>")
+				spanElement.attr("id",optionId)
+				spanElement.text(optionText)
+				parentElement.children().remove()
+				parentElement.append(radioItem)
+				parentElement.append(spanElement)
+			}
+		}
+		
+		function showChoices() {
+			$("#choices").show()
+		}
+		
+		function hideChoices() {
+			if(qCount <= 0)
+				$("#choices").hide()
+		}
+		
+		function addQuestion() {
+			if(qCount!=0) {
+				if(!saveQuestion()) {
+					alert("please select any option")
+					return
+				}
+				resetChoices()
+			}
+			qCount ++
+			var questionsDiv = $("#questions")
+			var questionElement = $("<div>")
+			questionElement.append("<span>Sample Question</span>")
+			questionElement.attr("id",qCount)
+			questionsDiv.append(questionElement)
+			showChoices()
+		}
+		function saveQuestion() {
+			qStatement = $("#questions #"+qCount+" span").text()
+			qChoices = [$('#c1').text(),$('#c2').text(),$('#c3').text(),$('#c4').text()]
+			qAnswer = $("#choices input[type='radio']:checked").val()
+			if(qAnswer == null)
+				return false
+			 Q.push({
+				    statement: qStatement ,
+				    choices: qChoices,
+				    answer: qAnswer
+				  })
+			return true
+		}
+		
+		function removeQuestion() {
+			if(qCount != 0) {
+				$("#questions #"+qCount).remove()
+				qCount --
+				Q.pop()
+				retrieveOptions()
+			}else {
+				console.log("No more questions to remove")
+			}
+		}
+	</script>
+
+</body>
+</html>

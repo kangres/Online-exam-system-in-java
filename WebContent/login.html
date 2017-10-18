@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<title>Login Page</title>
+</head>
+<body>
+	<script src="al.js"></script>
+	<script
+		src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+	<div id="form">
+		<h1>Sign In</h1>
+		<p class="user">
+			ID: <input id="id" /><br />
+		</p>
+		<p class="password">
+			PASSWORD: <input id="pass" type="password" /><br />
+		</p>
+		<p class="submit">
+			
+			<button type="button" class="btn btn-info" value="Login" onClick="validate()">Login</button>
+			<br>
+			<p class="reg"><a href="register.html" style="color:solid black">Register</a></p>
+			<div id="output"></div>
+		</p>
+	</div>
+	
+	<script>
+function validate() {
+	retrieve( () => {
+		var id = getValue("id")
+		var pass = getValue("pass")
+		User = U.find(u => u.id==id && u.password==pass)
+		setCookie()
+		if(User){
+			getElement("output").innerHTML = "Success"
+			window.location = User.type=="student" ? "exam.html": "question1.html"
+		}
+		else
+			getElement("output").innerHTML = "try again"
+	})
+}
+$(document).ready(function(){
+    $("input").focus(function(){
+        $(this).css("background-color", "#cccccc");
+    });
+    $("input").blur(function(){
+        $(this).css("background-color", "#ffffff");
+    });
+});
+</script>
+	<style>
+#form {
+	border: solid black 6px;
+	align: center;
+	background-color: orange;
+	width: 400px;
+	margin-left: 500px;
+	height: 300px;
+	margin-top: 150px;
+	border-radius: 10px;
+}
+
+.reg{
+margin-top:30px;
+margin-left:290px;
+font-size:20px;
+text-decoration:underline;
+}
+.user {
+	margin-left: 80px;
+}
+
+.password {
+	margin-left: 15px;
+}
+
+h1 {
+	margin-left: 120px;
+}
+
+body {
+	background-color: #483d8b;
+}
+
+.submit {
+	margin-left: 215px;
+	color:solid blue;
+}
+#output{
+font-size:20px;
+color:red;
+margin-left:200px;
+}
+</style>
+</body>
+</html>
